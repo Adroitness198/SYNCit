@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "SYNCit - Results";
+    var resultJson = ViewBag.Result as string;
+    var result = System.Text.Json.JsonDocument.Parse(resultJson);
+    var root = result.RootElement;
+    var matchScore = root.GetProperty("match_score").GetInt32();
+    var strengths = root.GetProperty("strengths").EnumerateArray().Select(s => s.GetString()).ToList();
+    var gaps = root.GetProperty("gaps").EnumerateArray().Select(g => g.GetString()).ToList();
+    var recommendation = root.GetProperty("recommendation").GetString();
+}
+
+<div class="container mt-5">
+    <div class="card p-4 mb-4">
+        <h2 class="text-center mb-1" style="color:#1a1a2e; font-weight:700;">SYNCit</h2>
+        <p class="text-center mb-3" style="color:#555;">Your Results</p>
+        <hr>
+
+        <div class="text-center mb-4">
+            <h4 style="color:#1a1a2e;">Match Score</h4>
+            <div style="font-size: 5rem; font-weight: 700; color: @(matchScore >= 70 ? "#28a745" : matchScore >= 50 ? "#ffc107" : "#dc3545");">
+                @matchScore%
+            </div>
+            <p style="color:#555;">
+                @(matchScore >= 70 ? "Strong Match! 🎉" : matchScore >= 50 ? "Moderate Match — some gaps to address" : "Low Match — significant gaps identified")
+            </p>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="card p-3 h-100">
+                    <h5 style="color:#28a745;">✅ Strengths</h5>
+                    <ul style="color:#1a1a2e;" class="mt-2">
+                        @foreach (var strength in strengths)
+                        {
+                            <li class="mb-1">@strength</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card p-3 h-100">
+                    <h5 style="color:#dc3545;">❌ Gaps</h5>
+                    <ul style="color:#1a1a2e;" class="mt-2">
+                        @foreach (var gap in gaps)
+                        {
+                            <li class="mb-1">@gap</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-3">
+            <h5 style="color:#ffc107;">💡 Recommendation</h5>
+            <p style="color:#1a1a2e;" class="mt-2">@recommendation</p>
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-action="Index" class="btn btn-primary px-5">Analyse Another</a>
+        </div>
+    </div>
+</div>

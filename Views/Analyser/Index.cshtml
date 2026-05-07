@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "SYNCit - CV Matcher";
+}
+
+<div class="container mt-5">
+    <div class="card p-4">
+        <h2 class="text-center mb-1" style="color:#fff; font-weight:700;">SYNCit</h2>
+        <p class="text-center mb-4" style="color:rgba(255,255,255,0.7);">Sync Your CV to the Job</p>
+        <hr style="border-color:rgba(255,255,255,0.2);">
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <form method="post" asp-action="Analyse" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label text-white">Upload Your CV</label>
+                <input type="file" name="cvFile" class="form-control" accept=".txt,.docx" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-white">Paste Job Description</label>
+                <textarea name="jobDescription" class="form-control" rows="10" placeholder="Paste the job description here..."></textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary px-5">Analyse Match</button>
+            </div>
+        </form>
+    </div>
+</div>
