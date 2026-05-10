@@ -7,29 +7,37 @@
     var strengths = root.GetProperty("strengths").EnumerateArray().Select(s => s.GetString()).ToList();
     var gaps = root.GetProperty("gaps").EnumerateArray().Select(g => g.GetString()).ToList();
     var recommendation = root.GetProperty("recommendation").GetString();
+    var scoreColor = matchScore >= 70 ? "#28a745" : matchScore >= 50 ? "#ffc107" : "#dc3545";
+    var scoreLabel = matchScore >= 70 ? "Strong Match! 🎉" : matchScore >= 50 ? "Moderate Match — some gaps to address" : "Low Match — significant gaps identified";
 }
 
-<div class="container mt-5">
-    <div class="card p-4 mb-4">
-        <h2 class="text-center mb-1" style="color:#1a1a2e; font-weight:700;">SYNCit</h2>
-        <p class="text-center mb-3" style="color:#555;">Your Results</p>
-        <hr>
 
-        <div class="text-center mb-4">
-            <h4 style="color:#1a1a2e;">Match Score</h4>
-            <div style="font-size: 5rem; font-weight: 700; color: @(matchScore >= 70 ? "#28a745" : matchScore >= 50 ? "#ffc107" : "#dc3545");">
+<div class="results-section">
+    <div class="container" style="max-width: 900px;">
+
+        <!-- Header Card -->
+        <div class="card p-4 mb-4 text-center">
+            <h2 style="color:#fff; font-weight:800;">SYNC<span style="color:#007baf;">it</span></h2>
+            <p style="color:rgba(255,255,255,0.7);">Your Results</p>
+            <hr style="border-color:rgba(255,255,255,0.2);">
+
+            <!-- Chart.js Gauge -->
+            <h5 style="color:#fff;">Match Score</h5>
+            <div style="max-width:220px; margin: 0 auto;">
+                <canvas id="scoreGauge"></canvas>
+            </div>
+            <div style="font-size: 3rem; font-weight: 800; color: @scoreColor; margin-top:-10px;">
                 @matchScore%
             </div>
-            <p style="color:#555;">
-                @(matchScore >= 70 ? "Strong Match! 🎉" : matchScore >= 50 ? "Moderate Match — some gaps to address" : "Low Match — significant gaps identified")
-            </p>
+            <p style="color:rgba(255,255,255,0.7);">@scoreLabel</p>
         </div>
 
-        <div class="row mb-3">
+        <!-- Strengths & Gaps -->
+        <div class="row mb-4">
             <div class="col-md-6 mb-3">
                 <div class="card p-3 h-100">
                     <h5 style="color:#28a745;">✅ Strengths</h5>
-                    <ul style="color:#1a1a2e;" class="mt-2">
+                    <ul style="color:#fff;" class="mt-2">
                         @foreach (var strength in strengths)
                         {
                             <li class="mb-1">@strength</li>
@@ -40,7 +48,7 @@
             <div class="col-md-6 mb-3">
                 <div class="card p-3 h-100">
                     <h5 style="color:#dc3545;">❌ Gaps</h5>
-                    <ul style="color:#1a1a2e;" class="mt-2">
+                    <ul style="color:#fff;" class="mt-2">
                         @foreach (var gap in gaps)
                         {
                             <li class="mb-1">@gap</li>
@@ -50,13 +58,47 @@
             </div>
         </div>
 
-        <div class="card p-3">
+        <!-- Recommendation -->
+        <div class="card p-3 mb-4">
             <h5 style="color:#ffc107;">💡 Recommendation</h5>
-            <p style="color:#1a1a2e;" class="mt-2">@recommendation</p>
+            <p style="color:#fff;" class="mt-2">@recommendation</p>
         </div>
 
-        <div class="text-center mt-4">
-            <a asp-action="Index" class="btn btn-primary px-5">Analyse Another</a>
+        <!-- Navigation Buttons -->
+        <div class="text-center mb-4">
+            <a asp-controller="Analyser" asp-action="Index" class="btn btn-primary px-4 me-3" style="border-radius:30px;">
+                ← Analyse Another
+            </a>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light px-4" style="border-radius:30px;">
+                🏠 Home
+            </a>
         </div>
+
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('scoreGauge').getContext('2d');
+        const score = @matchScore;
+        const remaining = 100 - score;
+        const color = score >= 70 ? '#28a745' : score >= 50 ? '#ffc107' : '#dc3545';
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [score, remaining],
+                    backgroundColor: [color, 'rgba(255,255,255,0.1)'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '75%',
+                plugins: { legend: { display: false } },
+                responsive: true
+            }
+        });
+    </script>
+}

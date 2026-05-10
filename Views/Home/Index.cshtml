@@ -1,8 +1,47 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "SYNCit - Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- HERO SECTION -->
+<div class="hero-section">
+    <div>
+        <h1 class="hero-title">SYNC<span style="color:#007baf;">it</span></h1>
+        <p class="hero-subtitle">Sync Your CV to the Job — Powered by AI</p>
+        <p style="color:rgba(255,255,255,0.5); margin-bottom: 2rem; max-width: 500px; margin-left:auto; margin-right:auto;">
+            Upload your CV, paste a job description and instantly get your match score, strengths, gaps and personalised recommendations.
+        </p>
+        <a asp-controller="Analyser" asp-action="Index" class="btn btn-primary btn-lg px-5 me-3" style="border-radius:30px;">
+            Get Started →
+        </a>
+    </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h5 class="step-title">Upload Your CV</h5>
+                    <p class="step-desc">Upload your CV in .docx or .txt format — our system extracts and reads the content automatically.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h5 class="step-title">Paste Job Description</h5>
+                    <p class="step-desc">Copy and paste the job description from any job posting — LinkedIn, Indeed, company websites.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h5 class="step-title">Get Your Results</h5>
+                    <p class="step-desc">Receive your match score, key strengths, skill gaps and a personalised recommendation — instantly.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
